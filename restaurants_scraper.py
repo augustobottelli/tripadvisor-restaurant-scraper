@@ -22,6 +22,19 @@ def get_html_and_parse(url):
 
 
 def _get_last_page_offset(url_html):
+    """Obtain last page offset.
+
+    Required to stop iterating over pages.
+
+    Parameters
+    ----------
+    url_html : BeautifulSoup object
+
+    Returns
+    -------
+    int
+
+    """
     page_numbers = url_html.findAll("div", attrs={"class": "pageNumbers"})[0]
     last_page_offset = page_numbers.findAll("a")[-1].get("data-offset")
     return int(last_page_offset)
@@ -59,6 +72,20 @@ def city_filter(city):
 
 
 def get_restaurants_info(restaurants_list, url_html, thread_pool):
+    """Find and save restaurants information into a list.
+
+    The href that ends with #REVIEWS was chosen to avoid duplicates.
+
+    Parameters
+    ----------
+    restaurants_list : list
+        list which will contain all of the restaurants information
+    url_html : BeautifulSoup object
+        html of the page scraped
+    thread_pool : ThreadPool object
+        object that will parallelize requests in order to speed up the process.
+
+    """
     def get_restaurant_info(restaurant_tag):
         restaurant_url = BASE_URL + restaurant_tag.get("href")
         restaurant_html = get_html_and_parse(restaurant_url)
@@ -79,7 +106,7 @@ def get_restaurants_info(restaurants_list, url_html, thread_pool):
     thread_pool.map(lambda x: get_restaurant_info(x), restaurants_tags)
 
 
-def set_cli():
+def _set_cli():
     parser = argparse.ArgumentParser()
     parser.add_argument("--city", type=str)
     args, unknown = parser.parse_known_args()
@@ -91,7 +118,7 @@ def set_cli():
         return args
 
 
-def make_csv(restaurants_lists, city, date):
+def _make_csv(restaurants_lists, city, date):
     columns = list(restaurants_lists[0].keys())
     df = DataFrame(restaurants_lists, columns=columns)
     csv_name = f"Restaurants_{city}_{date}.csv"
@@ -100,7 +127,7 @@ def make_csv(restaurants_lists, city, date):
 
 
 if __name__ == "__main__":
-    args = set_cli()
+    args = _set_cli()
     restaurants_data = []
     city_code, city_name = city_filter(args.city)
     logging.info(f"Scraping Tripadvisor restaurants data from {args.city}")
@@ -123,4 +150,4 @@ if __name__ == "__main__":
             restaurants_data, page_html, thread_pool
         )
 
-    make_csv(restaurants_data, args.city, DATE)
+    _make_csv(restaurants_data, args.city, DATE)
