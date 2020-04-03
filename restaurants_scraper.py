@@ -108,7 +108,8 @@ def get_restaurants_info(restaurants_list, url_html, thread_pool):
 
 def _set_cli():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--city", type=str)
+    parser.add_argument("--city", type=str, required=True, help="Need to specify a city")
+    parser.add_argument("--max_pages", type=int)
     args, unknown = parser.parse_known_args()
     if unknown:
         logging.warning(f"Unknown parameter {unknown}")
@@ -135,7 +136,10 @@ if __name__ == "__main__":
     page_offset = 0
     full_url = BASE_URL + f"/Restaurants-{city_code}-oa{page_offset}-{city_name}"
     first_page = get_html_and_parse(full_url)
-    last_page_offset = _get_last_page_offset(first_page)
+    if not args.max_pages:
+        last_page_offset = _get_last_page_offset(first_page)
+    else:
+        last_page_offset = (args.max_pages - 1) * PAGE_OFFSET_INTERVAL
     last_page = (last_page_offset / PAGE_OFFSET_INTERVAL) + 1
 
     logging.info(f"Scraping page 1 of {int(last_page)}")
@@ -149,5 +153,4 @@ if __name__ == "__main__":
         restaurants_information = get_restaurants_info(
             restaurants_data, page_html, thread_pool
         )
-
     _make_csv(restaurants_data, args.city, DATE)

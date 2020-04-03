@@ -22,6 +22,11 @@ $ pip3 install -r requirements.txt
 ```
 $ python3 restaurants_scraper.py --city "Buenos Aires"
 ```
+- If you wish to scrape just X pages instead of the whole catalog, you can include:
+```
+$ python3 restaurants_scraper.py --city "Buenos Aires" --max_pages X
+```
+
 It currently works for these cities:
 - Buenos Aires
 - Panama City
@@ -39,4 +44,4 @@ More cities can be added by including its city code and name from tripadvisor UR
 ## Disclaimer
 As mentioned before, the program is a web scraper and its correctness relies on Tripadvisor's HTML structure. If the page suffers changes, the program will break.
 
-As of today **2019/01/07 the program still works**
+As of today **2020/04/03 the program still works**
