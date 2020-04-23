@@ -41,7 +41,7 @@ def _get_last_page_offset(url_html):
     return int(last_page_offset)
 
 
-def _restaurant_info(restaurant_data, email):
+def _restaurant_info(restaurant_data, email=None):
     restaurant_dict = {
         "name": restaurant_data.get("name"),
         "priceRange": restaurant_data.get("priceRange"),
