@@ -6,6 +6,7 @@ from pandas import DataFrame
 from bs4 import BeautifulSoup
 from datetime import datetime
 from multiprocessing.pool import ThreadPool
+import re
 
 logging.basicConfig(level=logging.INFO)
 
@@ -40,7 +41,7 @@ def _get_last_page_offset(url_html):
     return int(last_page_offset)
 
 
-def _restaurant_info(restaurant_data):
+def _restaurant_info(restaurant_data, email):
     restaurant_dict = {
         "name": restaurant_data.get("name"),
         "priceRange": restaurant_data.get("priceRange"),
@@ -49,6 +50,7 @@ def _restaurant_info(restaurant_data):
         "address": restaurant_data.get("address").get("streetAddress"),
         "locality": restaurant_data.get("address").get("addressLocality"),
         "url": BASE_URL + restaurant_data.get("url"),
+        'email': email
     }
     return restaurant_dict
 
@@ -91,7 +93,12 @@ def get_restaurants_info(restaurants_list, url_html, thread_pool):
         restaurant_html = get_html_and_parse(restaurant_url)
         restaurant_data = restaurant_html.findAll("script")[1].contents[0]
         restaurant_data = ast.literal_eval(restaurant_data)
-        restaurant_information = _restaurant_info(restaurant_data)
+        try:
+            mailA = restaurant_html.findAll('a', href=re.compile("mailto"))
+            em = mailA[0]['href'].split('?')[0][7:]
+        except:
+            em = ''
+        restaurant_information = _restaurant_info(restaurant_data, em)
         if restaurant_information:
             restaurants_list.append(restaurant_information)
         else:
