@@ -94,11 +94,11 @@ def get_restaurants_info(restaurants_list, url_html, thread_pool):
         restaurant_data = restaurant_html.findAll("script")[1].contents[0]
         restaurant_data = ast.literal_eval(restaurant_data)
         try:
-            mailA = restaurant_html.findAll('a', href=re.compile("mailto"))
-            em = mailA[0]['href'].split('?')[0][len("mailto") + 1:]
+            restaurant_еmail_link = restaurant_html.findAll('a', href=re.compile("mailto"))
+            email = restaurant_email_link[0]['href'].split('?')[0][len("mailto") + 1:]
         except:
-            em = ''
-        restaurant_information = _restaurant_info(restaurant_data, em)
+            email = ''
+        restaurant_information = _restaurant_info(restaurant_data, email)
         if restaurant_information:
             restaurants_list.append(restaurant_information)
         else:
