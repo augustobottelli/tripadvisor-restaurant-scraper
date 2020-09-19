@@ -1,3 +1,6 @@
+# [DEPRECATED]
+I was told that Tripadvisor switched to a dynamic website so this scrapper became useless as it always scrapes the first page. Use it with caution. See if there's still some usefull pieces of code or feel free to contact me for whichever reason you desire: doubts, suggestions, etc. I do not plan, in the near future to maintain this project.
+
 # Tripadvisor Restaurants Scraper
 
 The idea of this project is to provide a tool that collects information from all the restaurants of a particular city. It currently gets the restaurant's:
@@ -40,8 +43,3 @@ It currently works for these cities:
 More cities can be added by including its city code and name from tripadvisor URL.
 
 **It doesn't support multiple cities at once.**
-
-## Disclaimer
-As mentioned before, the program is a web scraper and its correctness relies on Tripadvisor's HTML structure. If the page suffers changes, the program will break.
-
-As of today **2020/04/03 the program still works**
