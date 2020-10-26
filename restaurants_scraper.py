@@ -63,6 +63,7 @@ def city_filter(city):
         "Asuncion": ("g294080", "Asuncion"),
         "Sao Paulo": ("g303631", "Sao_Paulo_State_of_Sao_Paulo"),
         "La Paz": ("g294072", "La_Paz_La_Paz_Department"),
+        "NYC": ("g60763", "New_York_City_New_York"),
     }
     city_information = city_filter.get(city)
     if city_information is None:
